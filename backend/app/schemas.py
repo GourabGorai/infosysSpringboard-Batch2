@@ -7,7 +7,7 @@ from .models import UserRole
 class UserBase(BaseModel):
     name: str
     email: EmailStr
-    department: str
+    department: Optional[str] = None
     role: UserRole
 
 class UserCreate(UserBase):
@@ -22,7 +22,7 @@ class UserOut(UserBase):
     joined_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class Token(BaseModel):
     access_token: str
@@ -38,3 +38,9 @@ class ForgotPasswordRequest(BaseModel):
 class ResetPasswordRequest(BaseModel):
     email: EmailStr
     new_password: str
+
+class UserUpdate(BaseModel):
+    name: Optional[str] = None
+    department: Optional[str] = None
+    role: Optional[UserRole] = None
+

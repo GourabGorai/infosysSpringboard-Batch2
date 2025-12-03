@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./LoginRegister.css";
 import { FaUser, FaLock, FaEnvelope, FaKey } from "react-icons/fa";
 
 const API_BASE = "http://localhost:8000";
 
 const LoginRegister = () => {
+  const navigate = useNavigate();
   const [mode, setMode] = useState("login"); // 'login' | 'register' | 'forgot' | 'reset'
   const [form, setForm] = useState({
     name: "",
@@ -41,7 +43,7 @@ const LoginRegister = () => {
       // Save token
       localStorage.setItem("access_token", data.access_token);
       setMessage("Login successful!");
-      // TODO: navigate to dashboard later
+      navigate('/success');
     } catch (err) {
       setMessage(err.message);
     }
@@ -115,111 +117,113 @@ const LoginRegister = () => {
   };
 
   return (
-    <div className={`wrapper${mode === "register" ? " active" : ""}`}>
-      {/* LOGIN FORM (Also handles Forgot/Reset views) */}
-      <div className="form-box login">
-        {mode === "login" && (
-          <>
-            <h1>Login</h1>
-            {message && <p className="info-msg">{message}</p>}
-            <form onSubmit={handleLogin}>
-              <div className="input-box">
-                <span className="icon"><FaEnvelope /></span>
-                <input type="email" name="email" value={form.email} onChange={handleChange} required />
-                <label>Email</label>
-              </div>
-              <div className="input-box">
-                <span className="icon"><FaLock /></span>
-                <input type="password" name="password" value={form.password} onChange={handleChange} required />
-                <label>Password</label>
-              </div>
-              <button type="submit">Login</button>
-              <div className="register-link">
-                <p>
-                  <a href="#" onClick={() => setMode("forgot")}>Forgot Password?</a>
-                </p>
-                <p>
-                  Don&apos;t have an account? <a href="#" onClick={() => setMode("register")}>Register</a>
-                </p>
-              </div>
-            </form>
-          </>
-        )}
+    <div className="login-page-container">
+      <div className={`wrapper${mode === "register" ? " active" : ""}`}>
+        {/* LOGIN FORM (Also handles Forgot/Reset views) */}
+        <div className="form-box login">
+          {mode === "login" && (
+            <>
+              <h1>Login</h1>
+              {message && <p className="info-msg">{message}</p>}
+              <form onSubmit={handleLogin}>
+                <div className="input-box">
+                  <span className="icon"><FaEnvelope /></span>
+                  <input type="email" name="email" value={form.email} onChange={handleChange} required />
+                  <label>Email</label>
+                </div>
+                <div className="input-box">
+                  <span className="icon"><FaLock /></span>
+                  <input type="password" name="password" value={form.password} onChange={handleChange} required />
+                  <label>Password</label>
+                </div>
+                <button type="submit">Login</button>
+                <div className="register-link">
+                  <p>
+                    <a href="#" onClick={() => setMode("forgot")}>Forgot Password?</a>
+                  </p>
+                  <p>
+                    Don&apos;t have an account? <a href="#" onClick={() => setMode("register")}>Register</a>
+                  </p>
+                </div>
+              </form>
+            </>
+          )}
 
-        {mode === "forgot" && (
-          <>
-            <h1>Forgot Password</h1>
-            {message && <p className="info-msg">{message}</p>}
-            <form onSubmit={handleForgot}>
-              <div className="input-box">
-                <span className="icon"><FaEnvelope /></span>
-                <input type="email" name="email" value={form.email} onChange={handleChange} required />
-                <label>Enter your email</label>
-              </div>
-              <button type="submit">Verify Email</button>
-              <div className="register-link">
-                <p><a href="#" onClick={() => setMode("login")}>Back to Login</a></p>
-              </div>
-            </form>
-          </>
-        )}
+          {mode === "forgot" && (
+            <>
+              <h1>Forgot Password</h1>
+              {message && <p className="info-msg">{message}</p>}
+              <form onSubmit={handleForgot}>
+                <div className="input-box">
+                  <span className="icon"><FaEnvelope /></span>
+                  <input type="email" name="email" value={form.email} onChange={handleChange} required />
+                  <label>Enter your email</label>
+                </div>
+                <button type="submit">Verify Email</button>
+                <div className="register-link">
+                  <p><a href="#" onClick={() => setMode("login")}>Back to Login</a></p>
+                </div>
+              </form>
+            </>
+          )}
 
-        {mode === "reset" && (
-          <>
-            <h1>Reset Password</h1>
-            {message && <p className="info-msg">{message}</p>}
-            <form onSubmit={handleReset}>
-              <div className="input-box">
-                <span className="icon"><FaLock /></span>
-                <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required />
-                <label>New Password</label>
-              </div>
-              <button type="submit">Reset Password</button>
-              <div className="register-link">
-                <p><a href="#" onClick={() => setMode("login")}>Back to Login</a></p>
-              </div>
-            </form>
-          </>
-        )}
-      </div>
+          {mode === "reset" && (
+            <>
+              <h1>Reset Password</h1>
+              {message && <p className="info-msg">{message}</p>}
+              <form onSubmit={handleReset}>
+                <div className="input-box">
+                  <span className="icon"><FaLock /></span>
+                  <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required />
+                  <label>New Password</label>
+                </div>
+                <button type="submit">Reset Password</button>
+                <div className="register-link">
+                  <p><a href="#" onClick={() => setMode("login")}>Back to Login</a></p>
+                </div>
+              </form>
+            </>
+          )}
+        </div>
 
-      {/* REGISTER FORM */}
-      <div className="form-box register">
-        <h1>Register</h1>
-        {message && mode === "register" && <p className="info-msg">{message}</p>}
-        <form onSubmit={handleRegister}>
-          <div className="input-box">
-            <span className="icon"><FaUser /></span>
-            <input name="name" value={form.name} onChange={handleChange} required />
-            <label>Full Name</label>
-          </div>
-          <div className="input-box">
-            <span className="icon"><FaEnvelope /></span>
-            <input type="email" name="email" value={form.email} onChange={handleChange} required />
-            <label>Email</label>
-          </div>
-          <div className="input-box">
-            <span className="icon"><FaLock /></span>
-            <input type="password" name="password" value={form.password} onChange={handleChange} required />
-            <label>Password</label>
-          </div>
-          <div className="input-box">
-            <input name="department" value={form.department} onChange={handleChange} required />
-            <label>Department</label>
-          </div>
-          <div className="input-box">
-            <select name="role" value={form.role} onChange={handleChange}>
-              <option value="employee">Employee</option>
-              <option value="admin">Admin</option>
-            </select>
-          </div>
-          <button type="submit">Register</button>
-          <div className="register-link">
-            <p>
-              Already have an account? <a href="#" onClick={() => setMode("login")}>Login</a>
-            </p>
-          </div>
-        </form>
+        {/* REGISTER FORM */}
+        <div className="form-box register">
+          <h1>Register</h1>
+          {message && mode === "register" && <p className="info-msg">{message}</p>}
+          <form onSubmit={handleRegister}>
+            <div className="input-box">
+              <span className="icon"><FaUser /></span>
+              <input name="name" value={form.name} onChange={handleChange} required />
+              <label>Full Name</label>
+            </div>
+            <div className="input-box">
+              <span className="icon"><FaEnvelope /></span>
+              <input type="email" name="email" value={form.email} onChange={handleChange} required />
+              <label>Email</label>
+            </div>
+            <div className="input-box">
+              <span className="icon"><FaLock /></span>
+              <input type="password" name="password" value={form.password} onChange={handleChange} required />
+              <label>Password</label>
+            </div>
+            <div className="input-box">
+              <input name="department" value={form.department} onChange={handleChange} required />
+              <label>Department</label>
+            </div>
+            <div className="input-box">
+              <select name="role" value={form.role} onChange={handleChange}>
+                <option value="employee">Employee</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+            <button type="submit">Register</button>
+            <div className="register-link">
+              <p>
+                Already have an account? <a href="#" onClick={() => setMode("login")}>Login</a>
+              </p>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );
