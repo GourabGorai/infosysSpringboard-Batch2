@@ -6,6 +6,7 @@ BragBoard is an internal employee engagement platform designed to foster a cultu
 
 For detailed information about the project, please refer to the following documents:
 
+- **[Project Status](PROJECT_STATUS.md)**: Current progress tracking against the 8-week milestone plan.
 - **[Features](FEATURES.md)**: Comprehensive list of application features, user workflows, and technical implementation details.
 - **[Design](DESIGN.md)**: Frontend architecture, design system, component structure, and tech stack versions.
 - **[Backend](BACKEND.md)**: Backend architecture, API endpoints, database schema, and security practices.
