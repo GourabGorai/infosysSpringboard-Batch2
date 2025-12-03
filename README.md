@@ -6,9 +6,30 @@ BragBoard is an internal employee engagement platform designed to foster a cultu
 
 For detailed information about the project, please refer to the following documents:
 
-- **[Features](FEATURES.md)**: Comprehensive list of application features and user workflows.
-- **[Design](DESIGN.md)**: Frontend architecture, design system, and component structure.
-- **[Backend](BACKEND.md)**: Backend architecture, API endpoints, and database schema.
+- **[Features](FEATURES.md)**: Comprehensive list of application features, user workflows, and technical implementation details.
+- **[Design](DESIGN.md)**: Frontend architecture, design system, component structure, and tech stack versions.
+- **[Backend](BACKEND.md)**: Backend architecture, API endpoints, database schema, and security practices.
+
+## 🛠️ Tech Stack
+
+### Frontend
+- **Framework**: React 19
+- **Build Tool**: Vite 7
+- **Styling**: TailwindCSS 4
+- **Routing**: React Router DOM 7
+- **Icons**: React Icons
+- **Animations**: Framer Motion
+
+### Backend
+- **Framework**: FastAPI
+- **Server**: Uvicorn
+- **Database ORM**: SQLAlchemy
+- **Authentication**: JWT (JSON Web Tokens) with `python-jose`
+- **Validation**: Pydantic
+
+### Database
+- **Development**: SQLite
+- **Production**: PostgreSQL (Supported via `psycopg2-binary`)
 
 ## 🚀 Getting Started
 
@@ -27,27 +48,56 @@ For detailed information about the project, please refer to the following docume
 2. **Backend Setup**
    ```bash
    cd backend
+   # Create virtual environment
    python -m venv venv
-   # Windows
+   
+   # Activate virtual environment
+   # Windows:
    venv\Scripts\activate
-   # macOS/Linux
+   # macOS/Linux:
    # source venv/bin/activate
+   
+   # Install dependencies
    pip install -r requirements.txt
+   
+   # Run the server
    uvicorn app.main:app --reload
    ```
+   The API will be available at `http://localhost:8000`.
+   API Documentation (Swagger UI) is available at `http://localhost:8000/docs`.
 
 3. **Frontend Setup**
    ```bash
    cd frontend
+   # Install dependencies
    npm install
+   
+   # Run the development server
    npm run dev
    ```
+   The application will be available at `http://localhost:5173`.
 
-## 🛠️ Tech Stack
+## 📂 Project Structure
 
-- **Frontend**: React, Vite, TailwindCSS
-- **Backend**: FastAPI, SQLAlchemy
-- **Database**: SQLite (Dev) / PostgreSQL (Prod)
+```
+infosysSpringboard-Batch2/
+├── backend/                # FastAPI Backend
+│   ├── app/
+│   │   ├── routers/        # API Routes (auth, users, etc.)
+│   │   ├── models.py       # Database Models
+│   │   ├── schemas.py      # Pydantic Schemas
+│   │   └── main.py         # Application Entry Point
+│   ├── requirements.txt    # Python Dependencies
+│   └── bragboard.db        # SQLite Database (Dev)
+├── frontend/               # React Frontend
+│   ├── src/
+│   │   ├── Components/     # React Components
+│   │   ├── App.jsx         # Main Component
+│   │   └── main.jsx        # Entry Point
+│   ├── package.json        # Node.js Dependencies
+│   └── vite.config.js      # Vite Configuration
+└── README.md               # Project Documentation
+```
 
 ## 🤝 Contributing
 
