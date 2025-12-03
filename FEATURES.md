@@ -13,6 +13,11 @@ BragBoard is a platform for employees to recognize and celebrate each other's ac
     - **Employee**: Standard user who can send/receive shoutouts and manage their profile.
     - **Admin**: Privileged user with access to administrative logs and potentially user management.
 
+### Security Features
+- **Secure by Design**: All user passwords are encrypted before storage. We never see your actual password.
+- **Session Security**: Your login session is protected by secure tokens that expire automatically to keep your account safe.
+- **Data Privacy**: Your personal information is protected and only accessible to you and authorized administrators.
+
 ### Technical Implementation
 - **Frontend**:
     - `LoginRegister.jsx` handles the UI for all auth flows, switching modes (`login`, `register`, `forgot`, `reset`) based on user interaction.

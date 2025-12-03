@@ -48,6 +48,36 @@ Pydantic models ensure that data entering and leaving the API is valid.
 - **Request Models**: Validate incoming JSON bodies (e.g., `UserCreate` ensures email format and password length).
 - **Response Models**: Filter data returned to the client (e.g., `UserOut` excludes the `password` field).
 
+## Security & Data Protection
+
+### Account Creation & Management
+- **Unique Constraints**: The database enforces unique email addresses to prevent duplicate accounts.
+- **Input Validation**: Pydantic schemas (`schemas.py`) strictly validate all inputs during account creation:
+    - **Email**: Must be a valid email format (validated via `email-validator`).
+    - **Password**: Minimum length requirements are enforced.
+    - **Role**: Restricted to valid Enum values (`employee`, `admin`).
+
+### Password Storage
+We strictly follow industry standards for password storage. **Passwords are NEVER stored in plain text.**
+- **Algorithm**: `bcrypt`
+- **Implementation**: We use `passlib.context.CryptContext` with `schemes=["bcrypt"]`.
+- **Why Bcrypt?**:
+    - **Salting**: Automatically handles salting to protect against rainbow table attacks.
+    - **Work Factor**: It is a slow hashing algorithm, making brute-force attacks computationally expensive.
+- **Verification**: When a user logs in, the provided password is hashed and compared against the stored hash using `verify_password()`.
+
+### Token Management (JWT)
+- **Stateless Authentication**: We use JSON Web Tokens (JWT) to manage sessions without server-side state.
+- **Algorithm**: `HS256` (HMAC with SHA-256) for signing tokens.
+- **Payload**:
+    - `sub`: The subject (user's email).
+    - `exp`: Expiration time (set to a short duration, e.g., 30 minutes) to minimize the window of opportunity if a token is compromised.
+- **Security**: The secret key used to sign tokens is kept secure on the server. Any modification to the token payload invalidates the signature.
+
+### Data Integrity
+- **SQL Injection Protection**: By using SQLAlchemy ORM, all database queries are parameterized, automatically protecting against SQL injection attacks.
+- **Over-posting Protection**: Pydantic response models (`UserOut`) explicitly define which fields are sent back to the client, ensuring sensitive data like password hashes or internal flags are never leaked.
+
 ## Database Schema
 The database schema is defined in `models.py` using SQLAlchemy.
 
@@ -55,6 +85,7 @@ The database schema is defined in `models.py` using SQLAlchemy.
 - **User**:
     - `id`: Integer, Primary Key
     - `email`: String, Unique, Indexed
+    - `password`: String (Hashed)
     - `role`: Enum (Employee, Admin)
     - Relationships: `shoutouts_sent`, `comments`, `reactions`, `reports_filed`
 - **ShoutOut**:
@@ -78,8 +109,3 @@ The API is organized into routers located in `app/routers`.
 ### Users (`/users`)
 - `GET /users/me`: Get current authenticated user details.
 - `PUT /users/me`: Update current user profile.
-
-## Security Best Practices
-- **Password Hashing**: Passwords are never stored in plain text. We use bcrypt.
-- **CORS**: Configured to allow requests only from trusted origins (e.g., `http://localhost:5173`).
-- **Dependency Injection**: Ensures clean testing and resource management.
